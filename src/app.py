@@ -5,7 +5,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
-# Environment variables load karein
+# Load Environment variables 
 load_dotenv()
 
 st.set_page_config(page_title="Industrial Knowledge Brain", page_icon="🏭", layout="wide")
@@ -16,11 +16,10 @@ CHROMA_DIR = "chroma_db"
 groq_api_key = os.getenv("GROQ_API_KEY")
 
 if not groq_api_key:
-    st.error("❌ Error: GROQ_API_KEY aapki `.env` file mein nahi mili!")
+    st.error("❌ Error: GROQ_API_KEY not found in your `.env` file ")
 elif not os.path.exists(CHROMA_DIR):
-    st.warning("⚠️ Knowledge base taiyar nahi hai. Pehle terminal mein `python src/rag_engine.py` run karein.")
+    st.warning("⚠️ Knowledge base is ready. first run `python src/rag_engine.py` in your terminal.")
 else:
-    # Local Embeddings ke sath Chroma DB load karna
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vectorstore = Chroma(persist_directory=CHROMA_DIR, embedding_function=embeddings)
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
